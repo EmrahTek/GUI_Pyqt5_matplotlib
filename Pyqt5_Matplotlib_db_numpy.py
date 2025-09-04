@@ -102,9 +102,9 @@ class GeradeApp(QMainWindow):
         right_panel.addWidget(self.canvas)
 
         # Load existing records into table at startup.
-    #    self.load_all_records()
+        self.load_all_records()
         # Initial plot
-    #    self.plot_averages()
+        self.plot_averages()
 
     def create_tables(self):
         """Create SqLite tables if not exist."""
@@ -184,6 +184,21 @@ class GeradeApp(QMainWindow):
          layout.addWidget(self.btn_plot)
 
          return group
+    #----------------------Utility / Calculation(Araclar / Hesaplama)---------------
+    def _parse_numbers(self, text: str) -> np.ndarray:
+         """
+            Parse a comma -separated string into a Numpy array of floats.
+            (virgülle ayrilmis yaziyi Numpy float dizisine cevir.)
+         """
+         try:
+              # Split by comma, strip spaces, filter empty, covert to float. 
+              nums = [float(x.strip()) for x in text.split(',') if x.strip() != '']
+              if not nums:
+                   raise ValueError("No numbers parsed")
+              return np.array(nums, dtype=float)
+         except Exception:
+              raise ValueError("Gecersiz sayi formati. örnek: 90, 80,75 ( Invalid number format)")
+         
     
 
 
