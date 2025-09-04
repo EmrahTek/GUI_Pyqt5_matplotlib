@@ -335,3 +335,4 @@ if __name__ == "__main__":
 
 
 >>>>>>> origin/master
+# Feature bransh master üzerinden kodlar alindi. 
