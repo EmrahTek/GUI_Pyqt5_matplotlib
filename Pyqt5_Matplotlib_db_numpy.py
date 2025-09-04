@@ -263,6 +263,29 @@ class GeradeApp(QMainWindow):
         except Exception as e:
             QMessageBox.critical(self,"Hata(Error)", str(e))
 
+    def load_all_records(self):
+        """Load all DB rows into the table. """
+        cur = self.conn.cursor()
+        cur.execute("SELECT id,name,grades,mean,weighted FROM grades ORDER BY id DESC")
+        rows = cur.fetchall()
+
+        self.table.setRowCount(0)
+        for r, (rid, name,grades_json,mean,weighted) in enumerate(rows):
+            self.table.insertRow(r)
+            self.table.setITem(r,0, QTableWidgetItem(str(rid)))
+            self.table.setItem(r,1,QTableWidgetItem(name))
+            # Show short preview for grades.
+            try:
+                glist = json.loads(grades_json)
+                gtext = ",".join(str(int(x)) if float(x).is_integer() else f"{x:.2f}" for x in glist)
+            except Exception:
+                gtext = grades_json
+            self.table.setItem(r, 2, QTableWidgetItem(gtext))
+            self.table.setItem(r, 3, QTableWidgetItem(f"{mean:.2f}"))
+            self.table.setItem(r, 4, QTableWidgetItem(f"{weighted:.2f}"))
+
+            
+
     
 
 
