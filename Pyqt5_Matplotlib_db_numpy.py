@@ -76,8 +76,8 @@ class GeradeApp(QMainWindow):
         left_panel = QVBoxLayout() # Yeni bir dikey layout olusturuyoruz. 
         main_layout.addLayout(left_panel,2)
 
-        left_panel.addWidget(self._build_input_group())
-        left_panel.addWidget(self._build_action_group())
+    #    left_panel.addWidget(self._build_input_group()) # alttan tireli fonksiyonlar sadece bulunduklari klasslarda kullanilir. 
+    #    left_panel.addWidget(self._build_action_group())
         left_panel.addStretch(1)
 
         # Middle: Table(Orta:Tablo)
@@ -102,9 +102,9 @@ class GeradeApp(QMainWindow):
         right_panel.addWidget(self.canvas)
 
         # Load existing records into table at startup.
-        self.load_all_records()
+    #    self.load_all_records()
         # Initial plot
-        self.plot_averages()
+    #    self.plot_averages()
 
     def create_tables(self):
         """Create SqLite tables if not exist."""
@@ -124,6 +124,45 @@ class GeradeApp(QMainWindow):
         )
 
         self.conn.commit()
+
+    def __build_input_group(self) -> QGroupBox:
+         """Input widgets for name, grades,weights.(isim,notlar,agirliklar icin giris bilesenleri)"""
+         group = QGroupBox("Girdi (input)")
+         layout = QVBoxLayout(group)
+
+         # Name field(isim alani)
+         row_name = QHBoxLayout()
+         row_name.addWidget(QLabel("Ögrenci Adi (Student Name): "))
+         self.name_edit = QLineEdit()
+         self.name_edit.setPlaceholderText("örn: Ali Veli")
+         row_name.addWidget(self.name_edit)
+         layout.addLayout(row_name)
+
+         # Grades field 
+         row_grades = QVBoxLayout()
+         row_grades.addWidget(QLabel("Notlar(Grades, comma-separated / virgüller):"))
+         self.grades_edit = QLineEdit()
+         self.grades_edit.setPlaceholderText("örn: 90, 80, 75, 88")
+         row_grades.addWidget(self.grades_edit)
+         layout.addLayout(row_grades)
+
+         # Weights field (Agirliklar alani)
+         row_weights = QVBoxLayout()
+         row_weights.addWidget(QLabel("Agirliklar(Weights, optional / istege bagli: )"))
+         self.weights_edit = QLineEdit()
+         self.weights_edit.setPlaceholderText("Örn: 0.4,0.,0.3(toplami 1 olmali)")
+         row_weights.addWidget(self.weights_edit)
+         layout.addLayout(row_weights)
+
+         # Output labels 
+         out_row = QHBoxLayout()
+         self.mean_label = QLabel("Ortalama ( Mean ): -")
+         self.weighted_label = QLabel("Agirlikli (Weighted): -")
+         out_row.addWidget(self.mean_label)
+         out_row.addWidget(self.weighted_label)
+         layout.addLayout(out_row)
+         return group
+
 
 
 
