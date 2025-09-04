@@ -76,8 +76,8 @@ class GeradeApp(QMainWindow):
         left_panel = QVBoxLayout() # Yeni bir dikey layout olusturuyoruz. 
         main_layout.addLayout(left_panel,2)
 
-    #    left_panel.addWidget(self._build_input_group()) # alttan tireli fonksiyonlar sadece bulunduklari klasslarda kullanilir. 
-    #    left_panel.addWidget(self._build_action_group())
+        left_panel.addWidget(self._build_input_group()) # alttan tireli fonksiyonlar sadece bulunduklari klasslarda kullanilir. 
+        left_panel.addWidget(self._build_action_group())
         left_panel.addStretch(1)
 
         # Middle: Table(Orta:Tablo)
@@ -162,6 +162,30 @@ class GeradeApp(QMainWindow):
          out_row.addWidget(self.weighted_label)
          layout.addLayout(out_row)
          return group
+    def __build_action_group(self) -> QGroupBox:
+         """Buttons to compute,save,load,plot. """
+         group = QGroupBox("Actions")
+         layout = QHBoxLayout(group)
+
+         self.btn_compute = QPushButton("Hesapla(Compute)")
+         self.btn_compute.clicked.connect(self.compute_grades)
+         layout.addWidget(self.btn_compute)
+
+         self.btn_save = QPushButton("Save DB")
+         self.btn_save.clicked.connect(self.save_record())
+         layout.addWidget(self.btn_save)
+
+         self.btn_load = QPushButton("Reload")
+         self.btn_load.clicked.connect(self.load_all_records)
+         layout.addWidget(self.btn_load)
+
+         self.btn_plot = QPushButton("Plot")
+         self.btn_plot.clicked.connect(self.plot_averages)
+         layout.addWidget(self.btn_plot)
+
+         return group
+    
+
 
 
 
