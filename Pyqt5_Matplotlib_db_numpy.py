@@ -239,6 +239,29 @@ class GeradeApp(QMainWindow):
 
         except Exception as e:
             QMessageBox.critical(self, "Hata (Error)", str(e))  
+    def save_record(self):
+        """Persist last computed result into SQLite.(Son hesaplamayi SQLite kaydet)"""
+        try:
+            if not hasattr(self, "_last_result"):
+                raise RuntimeError("önce hesapla'ya basiniz(Press Compute first)")
+            data = self._last_result
+            cur = self.conn.cursor()
+            cur.execute
+            (
+                "INSERT INTO grades (name, grades,mean,weighted,weights) VALUES (?,?,?,?,?)",
+                (
+                    data["name"],
+                    json.dumps(data["grades"]),
+                    float(data["mean"]),
+                    float(data["weighted"]),
+                    json.dumps(data["weights"]) if data["weights"] is not None else None,  
+                ),
+            )
+            self.conn.commit()
+            self.load_all_records() # Refresh table.
+            QMessageBox.information(self,"Bilgi(info)", "Kayit eklendi(record saved)")
+        except Exception as e:
+            QMessageBox.critical(self,"Hata(Error)", str(e))
 
     
 
