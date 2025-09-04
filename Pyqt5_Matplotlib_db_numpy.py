@@ -198,7 +198,48 @@ class GeradeApp(QMainWindow):
               return np.array(nums, dtype=float)
          except Exception:
               raise ValueError("Gecersiz sayi formati. örnek: 90, 80,75 ( Invalid number format)")
-         
+    def compute_grades(self):
+        """ Compute mean and weighted average using Numpy; update labels. """
+        try:
+            name = self.name_edit.text().strip()
+
+            if not name:
+                raise ValueError    ("Lütfen ögrenci adi giriniz")
+              
+            grades = self._parse_numbers(self.grades_edit.text())
+            # If weights provided,validate and use np.average
+            weights_text =self.weights_edit.text().strip()
+              
+            if weights_text:
+                weights = self._parse_numbers(weights_text)
+                if len(weights) != len(grades):
+                    raise ValueError("Agirlik sayisi not sayisina esit olmali(Weights length must equal grades length)")
+                if not np.isclose(weights.sum(), 1.0):
+                    raise ValueError("Agirliklarin toplami 1 olmali (Weights must sum to 1)")
+                weighted = float(np.average(grades, weights=weights)) # Agirlikli ortalama
+                weights_list = weights.tolist()
+            else:
+                weighted = float(np.mean(grades))
+                weights_list = None
+            
+            mean = float(np.mean(grades))
+
+            # Update UI labels.
+            self.mean_label.setText(f"Ortalama (Mean): {mean:.2f}")
+            self.weighted_label.setText(f"Ağırlıklı (Weighted): {weighted:.2f}")
+
+            # Cache last computed for saving. (Kaydetmek için son hesaplamayı önbelleğe al)
+            self._last_result = {
+                "name": name,
+                "grades": grades.tolist(),
+                "mean": mean,
+                "weighted": weighted,
+                "weights": weights_list,
+            }
+
+        except Exception as e:
+            QMessageBox.critical(self, "Hata (Error)", str(e))  
+
     
 
 
