@@ -283,8 +283,32 @@ class GeradeApp(QMainWindow):
             self.table.setItem(r, 2, QTableWidgetItem(gtext))
             self.table.setItem(r, 3, QTableWidgetItem(f"{mean:.2f}"))
             self.table.setItem(r, 4, QTableWidgetItem(f"{weighted:.2f}"))
+    def plot_averages(self):
+        """Plot weighted average per student from DB. (DB'deki her öğrenci için ağırlıklı ortalamayı çiz)"""
+        cur = self.conn.cursor()
+        cur.execute("Select name, weighted FROM grades ORDER BY id ASC")
+        data = cur.fetchall()
 
-            
+        self.canvas.clear()
+        if not data:
+            self.canvas.ax.text(0.5,0.5,"Kayit yok(No records)", ha='center', va = 'center')
+            self.canvas.draw()
+            return
+        
+        names = [row[0] for row in data]
+        values = np.array([row[1] for row in data], dtype=float)
+         # Bar chart of weighted averages. (Ağırlıklı ortalamaların çubuk grafiği)
+        x = np.arange(len(names))
+        self.canvas.ax.bar(x, values)
+        self.canvas.ax.set_xticks(x)
+        self.canvas.ax.set_xticklabels(names, rotation=30, ha='right')
+        self.canvas.ax.set_ylabel('Ağırlıklı Ortalama (Weighted Avg)')
+        self.canvas.ax.set_title('Öğrenci Bazlı Ağırlıklı Ortalamalar (Per-Student Weighted Averages)')
+        self.canvas.ax.grid(True, axis='y', alpha=0.3)
+        self.canvas.fig.tight_layout()
+        self.canvas.draw()
+
+
 
     
 
