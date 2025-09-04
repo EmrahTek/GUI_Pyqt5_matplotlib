@@ -76,8 +76,8 @@ class GeradeApp(QMainWindow):
         left_panel = QVBoxLayout() # Yeni bir dikey layout olusturuyoruz. 
         main_layout.addLayout(left_panel,2)
 
-        left_panel.addWidget(self._build_input_group()) # alttan tireli fonksiyonlar sadece bulunduklari klasslarda kullanilir. 
-        left_panel.addWidget(self._build_action_group())
+        left_panel.addWidget(self.__build_input_group()) # alttan tireli fonksiyonlar sadece bulunduklari klasslarda kullanilir. 
+        left_panel.addWidget(self.__build_action_group())
         left_panel.addStretch(1)
 
         # Middle: Table(Orta:Tablo)
