@@ -76,8 +76,8 @@ class GeradeApp(QMainWindow):
         left_panel = QVBoxLayout() # Yeni bir dikey layout olusturuyoruz. 
         main_layout.addLayout(left_panel,2)
 
-        left_panel.addWidget(self.__build_input_group()) # alttan tireli fonksiyonlar sadece bulunduklari klasslarda kullanilir. 
-        left_panel.addWidget(self.__build_action_group())
+        left_panel.addWidget(self._build_input_group()) # alttan tireli fonksiyonlar sadece bulunduklari klasslarda kullanilir. 
+        left_panel.addWidget(self._build_action_group())
         left_panel.addStretch(1)
 
         # Middle: Table(Orta:Tablo)
@@ -125,7 +125,7 @@ class GeradeApp(QMainWindow):
 
         self.conn.commit()
 
-    def __build_input_group(self) -> QGroupBox:
+    def _build_input_group(self) -> QGroupBox:
          """Input widgets for name, grades,weights.(isim,notlar,agirliklar icin giris bilesenleri)"""
          group = QGroupBox("Girdi (input)")
          layout = QVBoxLayout(group)
@@ -162,7 +162,7 @@ class GeradeApp(QMainWindow):
          out_row.addWidget(self.weighted_label)
          layout.addLayout(out_row)
          return group
-    def __build_action_group(self) -> QGroupBox:
+    def _build_action_group(self) -> QGroupBox:
          """Buttons to compute,save,load,plot. """
          group = QGroupBox("Actions")
          layout = QHBoxLayout(group)
@@ -172,7 +172,7 @@ class GeradeApp(QMainWindow):
          layout.addWidget(self.btn_compute)
 
          self.btn_save = QPushButton("Save DB")
-         self.btn_save.clicked.connect(self.save_record())
+         self.btn_save.clicked.connect(self.save_record)
          layout.addWidget(self.btn_save)
 
          self.btn_load = QPushButton("Reload")
@@ -246,8 +246,7 @@ class GeradeApp(QMainWindow):
                 raise RuntimeError("önce hesapla'ya basiniz(Press Compute first)")
             data = self._last_result
             cur = self.conn.cursor()
-            cur.execute
-            (
+            cur.execute(
                 "INSERT INTO grades (name, grades,mean,weighted,weights) VALUES (?,?,?,?,?)",
                 (
                     data["name"],
@@ -272,7 +271,7 @@ class GeradeApp(QMainWindow):
         self.table.setRowCount(0)
         for r, (rid, name,grades_json,mean,weighted) in enumerate(rows):
             self.table.insertRow(r)
-            self.table.setITem(r,0, QTableWidgetItem(str(rid)))
+            self.table.setItem(r,0, QTableWidgetItem(str(rid)))
             self.table.setItem(r,1,QTableWidgetItem(name))
             # Show short preview for grades.
             try:
