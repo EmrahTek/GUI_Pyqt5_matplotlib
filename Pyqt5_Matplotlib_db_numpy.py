@@ -308,43 +308,15 @@ class GeradeApp(QMainWindow):
         self.canvas.fig.tight_layout()
         self.canvas.draw()
 
+    # ---------------------- Cleanup (Temizlik) ----------------------
 
-
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    def closeEvent(self, event):
+        """Ensure DB connection closes. (DB bağlantısının kapanmasını sağla)"""
+        try:
+            self.conn.close()
+        except Exception:
+            pass
+        event.accept()
 
 #*************main********************
 
